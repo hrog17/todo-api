@@ -60,7 +60,7 @@ app.get('/todos/:id', function(req, res) {
                 ') found');
         }
     }).catch(function(e) {
-        res.status(500).send;
+        res.status(500).send();
     });
 
     // // iterate over todos array to find the match
