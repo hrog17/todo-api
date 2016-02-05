@@ -51,19 +51,31 @@ app.get('/todos', function(req, res) {
 // GET /todos/id
 app.get('/todos/:id', function(req, res) {
     var todoId = parseInt(req.params.id, 10);
-    // iterate over todos array to find the match
-    var matchTodo = _.findWhere(todos, {
-        id: todoId
+
+    db.todo.findById(todoId).then(function(todo) {
+        if (!!todo) {
+            return res.json(todo.toJSON());
+        } else {
+            return res.status(404).json('todo id (' + todoId +
+                ') found');
+        }
+    }).catch(function(e) {
+        res.status(500).send;
     });
 
-    if (typeof matchTodo === 'undefined') {
-        //res.json(todoObj);
-        res.status(404).send();
-    } else {
-        console.log('hit');
-        //res.status(404).send();
-        res.json(matchTodo);
-    }
+    // // iterate over todos array to find the match
+    // var matchTodo = _.findWhere(todos, {
+    //     id: todoId
+    // });
+    //
+    // if (typeof matchTodo === 'undefined') {
+    //     //res.json(todoObj);
+    //     res.status(404).send();
+    // } else {
+    //     console.log('hit');
+    //     //res.status(404).send();
+    //     res.json(matchTodo);
+    // }
 });
 
 // POST /todos
