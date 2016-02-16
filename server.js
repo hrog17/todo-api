@@ -116,24 +116,17 @@ app.post('/todos', middleware.requireAuthentication, function(req, res) {
     // else e - pass to res.status(400).json(e) - 400
 
     db.todo.create(body).then(function(todo) {
-        return res.json(todo.toJSON());
+
+        req.user.addTodo(todo).then(function() {
+            return todo.reload();
+        }).then(function(todo) {
+            return res.json(todo.toJSON());
+        });
+
     }).catch(function(e) {
         return res.status(500).send;
     });
 
-    // if (!_.isBoolean(body.completed) || !_.isString(body.description) ||
-    //     body
-    //     .description.trim().length === 0) {
-    //     return res.status(400).send();
-    // }
-    //
-    // body.description = body.description.trim();
-    //
-    // body.id = todoNextId++;
-    // //console.log('description: ' + body.description);
-    // todos.push(body);
-    //
-    // res.status(201).json(body);
 });
 
 // DELETE /todos/:id
